@@ -8,157 +8,128 @@ using DotKill.KillProtect;
 
 internal class Program
 {
-	private static IntPtr ThisConsole = GetConsoleWindow();
+    private static IntPtr ThisConsole = GetConsoleWindow();
 
-	[DllImport("kernel32.dll", ExactSpelling = true)]
-	private static extern IntPtr GetConsoleWindow();
+    [DllImport("kernel32.dll", ExactSpelling = true)]
+    private static extern IntPtr GetConsoleWindow();
 
-	[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-	private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-	public static string GetPath(string[] Arguments)
-	{
-		string lgo = "                                     ____        _   _  ___ _ _ \r\n                                    |  _ \\  ___ | |_| |/ (_) | |\r\n                                    | | | |/ _ \\| __| ' /| | | |\r\n                                    | |_| | (_) | |_| . \\| | | |\r\n                                    |____/ \\___/ \\__|_|\\_\\_|_|_|";
-		string x = "                                    DOTNET CLEANER TOOL BY LOCKT";
-		string ModulePath = "";
-		ShowWindow(ThisConsole, 9);
-		Console.SetWindowSize(102, 22);
-		Console.SetBufferSize(102, 9001);
-		Console.ForegroundColor = ConsoleColor.Cyan;
-		Console.Write(lgo);
-		Console.ForegroundColor = ConsoleColor.Red;
-		Console.Write("\n" + x + "\n\n");
-		Console.ForegroundColor = ConsoleColor.Cyan;
-		Console.Title = "DotKill Unpacker by LockT#3341";
-		ShowWindow(ThisConsole, 9);
-		Console.SetWindowSize(102, 22);
-		Console.SetBufferSize(102, 9001);
-		if (Arguments.Length == 1)
-		{
-			ModulePath = Arguments[0];
-		}
-		if (Arguments.Length == 0)
-		{
-			ConsoleColor dsx = Console.ForegroundColor;
-			Console.ForegroundColor = ConsoleColor.Green;
-			Console.Write(" [+] ");
-			Console.ForegroundColor = ConsoleColor.Blue;
-			Console.Write("Path: ");
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			ModulePath = Console.ReadLine().Replace("\"", "");
-			Console.ForegroundColor = dsx;
-			Console.Clear();
-			Console.ForegroundColor = ConsoleColor.Cyan;
-			Console.Write(lgo);
-			Console.ForegroundColor = ConsoleColor.Red;
-			Console.Write("\n" + x + "\n\n");
-			Console.ForegroundColor = ConsoleColor.Cyan;
-			ShowWindow(ThisConsole, 9);
-			Console.SetWindowSize(102, 22);
-			Console.SetBufferSize(102, 9001);
-		}
-		return ModulePath;
-	}
+    public static string GetPath(string[] arguments)
+    {
+        const string logo = "                                     ____        _   _  ___ _ _ \r\n                                    |  _ \\  ___ | |_| |/ (_) | |\r\n                                    | | | |/ _ \\| __| ' /| | | |\r\n                                    | |_| | (_) | |_| . \\| | | |\r\n                                    |____/ \\___/ \\__|_|\\_\\_|_|_|";
+        const string title = "                                    DOTNET CLEANER TOOL BY LOCKT";
+        string modulePath = "";
 
-	private static void printRemoved(string str)
-	{
-		ConsoleColor oldC = Console.ForegroundColor;
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.Write("  [");
-		Console.ForegroundColor = ConsoleColor.Red;
-		Console.Write("Removed");
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.Write("] ");
-		Console.ForegroundColor = ConsoleColor.Green;
-		string[] xd = str.Split(':');
-		Console.Write(xd[0] + ":");
-		Console.ForegroundColor = ConsoleColor.Magenta;
-		Console.WriteLine(xd[1]);
-		Console.ForegroundColor = oldC;
-	}
+        ShowWindow(ThisConsole, 9);
+        Console.SetWindowSize(102, 22);
+        Console.SetBufferSize(102, 9001);
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(logo);
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"\n{title}\n");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Title = "DotKill Unpacker by LockT#3341";
 
-	private static void printTimed(string str)
-	{
-		ConsoleColor oldC = Console.ForegroundColor;
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.Write(" [");
-		Console.ForegroundColor = ConsoleColor.Blue;
-		Console.Write(DateTime.Now.ToString("hh:mm:ss"));
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.Write("] ");
-		Console.ForegroundColor = oldC;
-		Console.Write(str);
-	}
+        if (arguments.Length == 1)
+        {
+            modulePath = arguments[0];
+        }
+        else if (arguments.Length == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(" [+] ");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("Path: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            modulePath = Console.ReadLine()?.Replace("\"", "");
+            Console.ResetColor();
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(logo);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\n{title}\n");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+        }
+        return modulePath;
+    }
 
-	private static void printPath(string str)
-	{
-		ConsoleColor oldC = Console.ForegroundColor;
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.Write(" [");
-		Console.ForegroundColor = ConsoleColor.Magenta;
-		Console.Write("SavePath");
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.Write("] ");
-		Console.ForegroundColor = oldC;
-		Console.Write(str);
-	}
+    private static void PrintMessage(string label, string message, ConsoleColor labelColor, ConsoleColor messageColor)
+    {
+        ConsoleColor oldColor = Console.ForegroundColor;
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(" [");
+        Console.ForegroundColor = labelColor;
+        Console.Write(label);
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write("] ");
+        Console.ForegroundColor = messageColor;
+        Console.WriteLine(message);
+        Console.ForegroundColor = oldColor;
+    }
 
-	private static void printExit()
-	{
-		ConsoleColor oldC = Console.ForegroundColor;
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.Write("     [");
-		Console.ForegroundColor = ConsoleColor.Red;
-		Console.Write("Exit");
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.Write("] ");
-		Console.ForegroundColor = oldC;
-	}
+    private static void PrintRemoved(string message) => PrintMessage("Removed", message, ConsoleColor.Red, ConsoleColor.Green);
 
-	private static void Main(string[] args)
-	{
-		string loadPath = GetPath(args);
-		ModuleDefMD module = ModuleDefMD.Load(loadPath);
-		string junkantide4dot = AntiDe4Dot.Execute(module);
-		string dedot = junkantide4dot.Split('+')[0];
-		string junk = junkantide4dot.Split('+')[1];
-		printRemoved("Anti De4Dot ........: " + dedot);
-		printRemoved("Junk ...............: " + junk);
-		printRemoved($"Maths ..............: {MathProtection.Execute(module)}");
-		printRemoved($"Anti Decompiler ....: {AntiDecompiler.Execute(module)}");
-		printRemoved($"CFlow ..............: {CFlow.Execute(module)}");
-		Console.ForegroundColor = ConsoleColor.Yellow;
-		printTimed("Assembly is saving now");
-		Thread.Sleep(200);
-		Console.ForegroundColor = ConsoleColor.Green;
-		Console.Write(".");
-		Thread.Sleep(200);
-		Console.ForegroundColor = ConsoleColor.Blue;
-		Console.Write(".");
-		Thread.Sleep(200);
-		Console.ForegroundColor = ConsoleColor.Magenta;
-		Console.WriteLine(".");
-		string text2 = Path.GetDirectoryName(loadPath);
-		if (text2 != null && !text2.EndsWith("\\"))
-		{
-			text2 += "\\";
-		}
-		string savePath = text2 + Path.GetFileNameWithoutExtension(loadPath) + "_dotkill" + Path.GetExtension(loadPath);
-		module.Write(savePath, new ModuleWriterOptions(module)
-		{
-			PEHeadersOptions = 
-			{
-				NumberOfRvaAndSizes = 13u
-			},
-			Logger = DummyLogger.NoThrowInstance
-		});
-		Console.ForegroundColor = ConsoleColor.DarkGreen;
-		printTimed("Assembly is saved:\n");
-		Console.ForegroundColor = ConsoleColor.Yellow;
-		printPath(savePath + "\n");
-		Console.ForegroundColor = ConsoleColor.White;
-		printExit();
-		Console.WriteLine("Press any key for exit.");
-		Console.ReadKey();
-	}
+    private static void PrintTimed(string message) => PrintMessage(DateTime.Now.ToString("HH:mm:ss"), message, ConsoleColor.Blue, ConsoleColor.White);
+
+    private static void PrintPath(string message) => PrintMessage("SavePath", message, ConsoleColor.Magenta, ConsoleColor.White);
+
+    private static void PrintExit() => PrintMessage("Exit", "Press any key to exit.", ConsoleColor.Red, ConsoleColor.White);
+
+    private static void Main(string[] args)
+    {
+        try
+        {
+            string loadPath = GetPath(args);
+            ModuleDefMD module = ModuleDefMD.Load(loadPath);
+
+            string junkAntiDe4Dot = AntiDe4Dot.Execute(module);
+            string[] results = junkAntiDe4Dot.Split('+');
+            string dedot = results[0];
+            string junk = results[1];
+
+            PrintRemoved($"Anti De4Dot ........: {dedot}");
+            PrintRemoved($"Junk ...............: {junk}");
+            PrintRemoved($"Maths ..............: {MathProtection.Execute(module)}");
+            PrintRemoved($"Anti Decompiler ....: {AntiDecompiler.Execute(module)}");
+            PrintRemoved($"CFlow ..............: {CFlow.Execute(module)}");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            PrintTimed("Assembly is saving now");
+            Thread.Sleep(200);
+            Console.Write(".");
+            Thread.Sleep(200);
+            Console.Write(".");
+            Thread.Sleep(200);
+            Console.WriteLine(".");
+
+            string directoryPath = Path.GetDirectoryName(loadPath);
+            if (directoryPath != null && !directoryPath.EndsWith("\\"))
+            {
+                directoryPath += "\\";
+            }
+            string savePath = directoryPath + Path.GetFileNameWithoutExtension(loadPath) + "_dotkill" + Path.GetExtension(loadPath);
+
+            module.Write(savePath, new ModuleWriterOptions(module)
+            {
+                PEHeadersOptions = { NumberOfRvaAndSizes = 13u },
+                Logger = DummyLogger.NoThrowInstance
+            });
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            PrintTimed("Assembly is saved:\n");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            PrintPath(savePath);
+            Console.ForegroundColor = ConsoleColor.White;
+            PrintExit();
+            Console.ReadKey();
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            Console.ResetColor();
+        }
+    }
 }
