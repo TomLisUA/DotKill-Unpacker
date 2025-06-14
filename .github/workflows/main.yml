@@ -1,0 +1,59 @@
+# DotKill-CI-Pipeline
+# Azure DevOps CI pipeline for DotKill .NET Framework 4.8 project
+
+name: DotKill-CI-Pipeline
+
+# Triggers for push and pull requests to main branch
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+# Use Windows agent with .NET Framework 4.8 SDK
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+# Step 1: Use .NET Framework SDK
+- task: UseDotNet@2
+  displayName: 'Use .NET Framework 4.8 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '4.8.x'
+    includePreviewVersions: false
+
+# Step 2: NuGet Restore
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet Tool'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Restore'
+  inputs:
+    restoreSolution: '$(solution)'
+
+# Step 3: MSBuild Build
+- task: MSBuild@1
+  displayName: 'Build solution'
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    msbuildArguments: '/p:OutputPath=$(Build.ArtifactStagingDirectory)\drop\'
+
+# Step 4: Publish Build Artifacts
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Build Artifacts'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)\drop'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
